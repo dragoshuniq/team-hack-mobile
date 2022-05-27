@@ -2,12 +2,18 @@ import {uniq} from 'lodash';
 import {useCallback, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {io} from 'socket.io-client';
+import {getUniqueId} from 'react-native-device-info';
+import {getAllUserByDevice} from 'app-redux/actions/app/app.actions';
 const useChangeLocation = () => {
   const socket = useRef();
   const dispatch = useDispatch();
 
   useEffect(() => {
     socket.current = io('http://192.168.151.38:8080/');
+    socket.current.emit('addUser', getUniqueId());
+    socket.current.on('confirmedScanned', () => {
+      dispatch(getAllUserByDevice(getUniqueId()));
+    });
     return () => {
       socket.current.disconnect();
     };

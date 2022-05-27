@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Animated, Dimensions, Platform} from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, {Polygon} from 'react-native-maps';
 import {COLORS, SCREEN_SIZE, APP_STYLES} from 'theme/theme';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -32,6 +32,11 @@ const ChildMap = props => {
             />
           </Animated.View>
         </MapView.Marker>
+        <Polygon
+          coordinates={triangleCoords}
+          fillColor={'rgba(255, 0, 0, 0.5)'}
+          strokeColor={'rgba(255, 0, 0, 0.5)'}
+        />
         {[].map((marker, index) => {
           return (
             <MapView.Marker
@@ -75,3 +80,10 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
 });
+
+const triangleCoords = [
+  {latitude: 25.774, longitude: -80.19},
+  {latitude: 18.466, longitude: -66.118},
+  {latitude: 32.321, longitude: -64.757},
+  {latitude: 25.774, longitude: -80.19},
+];

@@ -49,7 +49,7 @@ export default function AppStackNavigator({navigation}) {
   React.useEffect(() => {
     const requestLocationPermission = async () => {
       if (Platform.OS === 'ios') {
-        getOneTimeLocation();
+        // getOneTimeLocation();
         subscribeLocationLocation();
       } else {
         try {
@@ -83,7 +83,9 @@ export default function AppStackNavigator({navigation}) {
         setLocationStatus('Getting Location');
 
         dispatch(setter({location: position.coords}));
-
+        console.log(
+          'Location--------------------------------------------------------',
+        );
         changeLocation(getUniqueId(), {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
@@ -95,7 +97,7 @@ export default function AppStackNavigator({navigation}) {
       },
       {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 1000,
         maximumAge: 1000,
       },
     );
@@ -105,6 +107,7 @@ export default function AppStackNavigator({navigation}) {
     watchID = Geolocation.watchPosition(
       position => {
         setLocationStatus('WatchLocation');
+
         changeLocation(getUniqueId(), {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
