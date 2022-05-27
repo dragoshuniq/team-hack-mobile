@@ -5,22 +5,7 @@ export const setter = value => ({
   value,
 });
 
-export const signIn = (email, password) => ({
-  type: TYPES.SIGN_IN,
-  email,
-  password,
-});
-export const signInGoogle = data => ({
-  type: TYPES.SIGN_IN_GOOGLE,
-  data,
-});
-export const signInFacebook = data => ({
-  type: TYPES.SIGN_IN_FACEBOOK,
-  data,
-});
-
-export const signUp = (email, password) => ({
-  type: TYPES.SIGN_UP,
-  email,
-  password,
+export const getAllUserByDevice = uniqueDeviceId => ({
+  type: TYPES.GET_ALL_USERS_BY_DEVICE,
+  uniqueDeviceId,
 });

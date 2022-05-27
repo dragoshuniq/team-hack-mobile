@@ -1,1 +1,2 @@
 export const SETTER = 'SETTER_APP';
+export const GET_ALL_USERS_BY_DEVICE = 'GET_ALL_USERS_BY_DEVICE';

@@ -1,13 +1,8 @@
-import {
-  loginAppRequest,
-  registerRequest,
-  googleSignInRequest,
-  facebookSignInRequest,
-} from './auth/auth.requests';
+import axios from 'axios';
+import {API_ROUTES} from 'constants/endpoints/endpoints';
 
-export {
-  loginAppRequest,
-  registerRequest,
-  googleSignInRequest,
-  facebookSignInRequest,
+export const getAllUserByDevice = async uniqueDeviceId => {
+  return axios.get(API_ROUTES.GET_DEVICE, {uniqueDeviceId}).then(response => {
+    return response.data;
+  });
 };

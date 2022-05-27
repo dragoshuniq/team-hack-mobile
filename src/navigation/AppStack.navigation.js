@@ -5,44 +5,117 @@ import Splash from 'components/screens/Splash/Splash.screen.js';
 import TatNavigation from './Tab.navigation';
 import RNBootSplash from 'react-native-bootsplash';
 import {useDispatch, useSelector} from 'react-redux';
-import {setter} from 'app-redux/actions/app/app.actions';
+import {setter, getAllUserByDevice} from 'app-redux/actions/app/app.actions';
 import {SCREENS} from 'constants/screens/screen.names';
 import axios from 'axios';
 import {getStorageData} from 'helpers/storage';
 import Geolocation from '@react-native-community/geolocation';
-
+import {getUniqueId} from 'react-native-device-info';
+import useChangeLocation from 'helpers/useChangeLocation';
+import {Platform, PermissionsAndroid} from 'react-native';
+import {getMotion} from 'constants/data/getMotion';
 const Stack = createStackNavigator();
 
 export default function AppStackNavigator({navigation}) {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = React.useState(true);
-  const isSignedIn = useSelector(state => state.appReducer.isSignedIn);
+  const [locationStatus, setLocationStatus] = React.useState('');
+
+  const appReducer = useSelector(state => state.appReducer);
+  const {isSignedIn, isLoading} = appReducer;
 
   React.useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const token = await getStorageData('token');
-        if (token) {
-          axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(
-            token,
-          )}`;
-          dispatch(setter({isSignedIn: true}));
+    dispatch(getAllUserByDevice());
+  }, []);
+
+  React.useEffect(() => {
+    if (!isLoading) RNBootSplash.hide({fade: true});
+  }, [isLoading]);
+
+  const changeLocation = useChangeLocation();
+  let watchID;
+
+  React.useEffect(() => {
+    const uniqueDeviceId = getUniqueId();
+    dispatch(setter({uniqueDeviceId}));
+  }, []);
+
+  React.useEffect(() => {
+    const requestLocationPermission = async () => {
+      if (Platform.OS === 'ios') {
+        getOneTimeLocation();
+        subscribeLocationLocation();
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: 'Location Access Required',
+              message: 'This App needs to Access your location',
+            },
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            getOneTimeLocation();
+            subscribeLocationLocation();
+          } else {
+            setLocationStatus('Permission Denied');
+          }
+        } catch (err) {
+          console.warn(err);
         }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-        await RNBootSplash.hide({fade: true});
       }
     };
-    checkAuth();
+    requestLocationPermission();
+    return () => {
+      Geolocation.clearWatch(watchID);
+    };
   }, []);
+  const getOneTimeLocation = () => {
+    setLocationStatus('Getting Location ...');
+    Geolocation.getCurrentPosition(
+      position => {
+        setLocationStatus('Getting Location');
 
-  React.useEffect(() => {
-    Geolocation.getCurrentPosition(({coords}) => {
-      dispatch(setter({location: coords}));
-    });
-  }, []);
+        dispatch(setter({location: position.coords}));
+
+        changeLocation(getUniqueId(), {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          motion: getMotion(position.coords.speed),
+        });
+      },
+      error => {
+        setLocationStatus(error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 1000,
+      },
+    );
+  };
+
+  const subscribeLocationLocation = () => {
+    watchID = Geolocation.watchPosition(
+      position => {
+        setLocationStatus('WatchLocation');
+        changeLocation(getUniqueId(), {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          motion: getMotion(position.coords.speed),
+        });
+        console.log(position.coords);
+
+        dispatch(setter({location: position.coords}));
+      },
+      error => {
+        setLocationStatus(error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        maximumAge: 1000,
+      },
+    );
+  };
 
   if (isLoading) {
     return <Splash />;
@@ -53,24 +126,11 @@ export default function AppStackNavigator({navigation}) {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name={SCREENS.ChildMap} component={Connection.ChildMap} />
-      <Stack.Screen name={SCREENS.QRCODE} component={Connection.QRcode} />
-      <Stack.Screen name={SCREENS.TAB_NAVIGATION} component={TatNavigation} />
-      {/* {isSignedIn ? (
-        <>
-          <Stack.Screen
-            name={SCREENS.TAB_NAVIGATION}
-            component={TatNavigation}
-          />
-        </>
+      {isSignedIn ? (
+        <Stack.Screen name={SCREENS.TAB_NAVIGATION} component={TatNavigation} />
       ) : (
-        <>
-          <Stack.Screen
-            name={SCREENS.RESET_PASSWORD}
-            component={Connection.ResetPassword}
-          />
-        </>
-      )} */}
+        <Stack.Screen name={SCREENS.QRCODE} component={Connection.QRcode} />
+      )}
     </Stack.Navigator>
   );
 }

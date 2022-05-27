@@ -19,6 +19,8 @@ target 'Teamteam' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'RNSensors', :path => '../node_modules/react-native-sensors'
+
   target 'TeamteamTests' do
     inherit! :complete
     # Pods for testing
@@ -35,5 +37,7 @@ target 'Teamteam' do
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
   pod 'GoogleSignIn', '~> 6.1.0'
+  pod 'RNSensors', :path => '../node_modules/react-native-sensors'
+
 
 end
