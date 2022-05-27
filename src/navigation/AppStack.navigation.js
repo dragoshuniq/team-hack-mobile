@@ -14,8 +14,15 @@ import {getUniqueId} from 'react-native-device-info';
 import useChangeLocation from 'helpers/useChangeLocation';
 import {Platform, PermissionsAndroid} from 'react-native';
 import {getMotion} from 'constants/data/getMotion';
-const Stack = createStackNavigator();
+import {Notifications} from 'react-native-notifications';
+import {
+  gyroscope,
+  setUpdateIntervalForType,
+  SensorTypes,
+} from 'react-native-sensors';
 
+const Stack = createStackNavigator();
+setUpdateIntervalForType(SensorTypes.gyroscope, 200);
 export default function AppStackNavigator({navigation}) {
   const dispatch = useDispatch();
   const [locationStatus, setLocationStatus] = React.useState('');
@@ -24,7 +31,7 @@ export default function AppStackNavigator({navigation}) {
   const {isSignedIn, isLoading} = appReducer;
 
   React.useEffect(() => {
-    dispatch(getAllUserByDevice());
+    dispatch(getAllUserByDevice(appReducer.uniqueDeviceId));
   }, []);
 
   React.useEffect(() => {
@@ -116,6 +123,16 @@ export default function AppStackNavigator({navigation}) {
       },
     );
   };
+
+  React.useEffect(() => {
+    // const subscription = gyroscope.subscribe(({x, y, z, timestamp}) => {
+    //   let at = Math.sqrt(x * x + y * y + z * z);
+    //   if (at > 50) {
+    //     console.log(at);
+    //   }
+    // });
+    // return () => subscription.unsubscribe();
+  }, []);
 
   if (isLoading) {
     return <Splash />;

@@ -48,6 +48,7 @@
     "react-native-image-crop-picker": "^0.37.3",
     "react-native-maps": "^0.31.1",
     "react-native-modal": "^13.0.1",
+    "react-native-notifications": "^4.3.1",
     "react-native-onboarding-swiper": "^1.2.0",
     "react-native-pdf": "^6.5.0",
     "react-native-qrcode-svg": "^6.1.2",

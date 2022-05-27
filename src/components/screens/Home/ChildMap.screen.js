@@ -6,14 +6,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Splash from 'components/screens/Splash/Splash.screen.js';
 
-const {width, height} = Dimensions.get('window');
-
-const CARD_HEIGHT = 250;
-const CARD_WIDTH = width * 0.8;
-const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
-
 const ChildMap = props => {
-  const {location} = props;
+  const {location, user} = props;
 
   if (!location) {
     return <Splash />;
@@ -27,8 +21,17 @@ const ChildMap = props => {
           latitudeDelta: 0.06,
           longitudeDelta: 0.05,
         }}
-        showsUserLocation
+        // showsUserLocation
         style={styles.container}>
+        <MapView.Marker coordinate={location}>
+          <Animated.View style={styles.markerWrap}>
+            <Animated.Image
+              source={{uri: user?.profileImage?.fileUrl}}
+              style={[styles.userImage]}
+              resizeMode="cover"
+            />
+          </Animated.View>
+        </MapView.Marker>
         {[].map((marker, index) => {
           return (
             <MapView.Marker
@@ -65,5 +68,10 @@ const styles = StyleSheet.create({
   marker: {
     width: 30,
     height: 30,
+  },
+  userImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
   },
 });

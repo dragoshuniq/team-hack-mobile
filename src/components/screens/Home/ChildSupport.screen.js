@@ -18,10 +18,11 @@ import {useFormik} from 'formik';
 import {problemList} from 'constants/data/support.data';
 import Input from 'utils/Input';
 import Mat from 'react-native-vector-icons/MaterialIcons';
-import {AccountRole} from 'constants/data/account-role';
+import {Notifications} from 'react-native-notifications';
+
 export default function ChildSupport(props) {
   const dim = useWindowDimensions();
-  const {parents: userParents} = props;
+  const {parents} = props;
   const dialCall = number => {
     let phoneNumber = '';
     if (Platform.OS === 'android') {
@@ -31,7 +32,24 @@ export default function ChildSupport(props) {
     }
     Linking.openURL(phoneNumber);
   };
-  const parents = userParents.filter(pr => pr.role === AccountRole.PARINTE);
+
+  React.useEffect(() => {
+    Notifications.ios.checkPermissions().then(currentPermissions => {
+      console.log('Badges enabled: ' + !!currentPermissions.badge);
+      console.log('Sounds enabled: ' + !!currentPermissions.sound);
+      console.log('Alerts enabled: ' + !!currentPermissions.alert);
+      console.log('Car Play enabled: ' + !!currentPermissions.carPlay);
+      console.log(
+        'Critical Alerts enabled: ' + !!currentPermissions.criticalAlert,
+      );
+      console.log('Provisional enabled: ' + !!currentPermissions.provisional);
+      console.log(
+        'Provides App Notification Settings enabled: ' +
+          !!currentPermissions.providesAppNotificationSettings,
+      );
+      console.log('Announcement enabled: ' + !!currentPermissions.announcement);
+    });
+  }, []);
 
   const {handleSubmit, handleChange, values, setFieldValue} = useFormik({
     initialValues: {
@@ -41,7 +59,9 @@ export default function ChildSupport(props) {
     onSubmit: sendNotification,
   });
 
-  function sendNotification(data) {}
+  function sendNotification(data) {
+    pushNotification();
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>

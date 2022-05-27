@@ -7,7 +7,7 @@ const useChangeLocation = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    socket.current = io('http://localhost:8080/');
+    socket.current = io('http://192.168.151.38:8080/');
     return () => {
       socket.current.disconnect();
     };

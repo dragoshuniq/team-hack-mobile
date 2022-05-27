@@ -11,7 +11,7 @@ GoogleSignin.configure({
   webClient:
     '1057553385734-enjolc0737atqati641v1u32ong78hhr.apps.googleusercontent.com',
 });
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = 'http://192.168.151.38:8080';
 sagaMiddleware.run(sagas);
 
 export default function Main() {
