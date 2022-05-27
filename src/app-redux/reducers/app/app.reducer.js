@@ -7,6 +7,7 @@ const defaultState = {
   isSignedIn: false,
   hasResponse: null,
   response: null,
+  location: null,
 };
 
 // * Reducer

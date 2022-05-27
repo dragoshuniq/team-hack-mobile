@@ -9,6 +9,7 @@ import {setter} from 'app-redux/actions/app/app.actions';
 import {SCREENS} from 'constants/screens/screen.names';
 import axios from 'axios';
 import {getStorageData} from 'helpers/storage';
+import Geolocation from '@react-native-community/geolocation';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,12 @@ export default function AppStackNavigator({navigation}) {
     checkAuth();
   }, []);
 
+  React.useEffect(() => {
+    Geolocation.getCurrentPosition(({coords}) => {
+      dispatch(setter({location: coords}));
+    });
+  }, []);
+
   if (isLoading) {
     return <Splash />;
   }
@@ -46,7 +53,10 @@ export default function AppStackNavigator({navigation}) {
       screenOptions={{
         headerShown: false,
       }}>
-      {isSignedIn ? (
+      <Stack.Screen name={SCREENS.ChildMap} component={Connection.ChildMap} />
+      <Stack.Screen name={SCREENS.QRCODE} component={Connection.QRcode} />
+      <Stack.Screen name={SCREENS.TAB_NAVIGATION} component={TatNavigation} />
+      {/* {isSignedIn ? (
         <>
           <Stack.Screen
             name={SCREENS.TAB_NAVIGATION}
@@ -56,17 +66,11 @@ export default function AppStackNavigator({navigation}) {
       ) : (
         <>
           <Stack.Screen
-            name={SCREENS.ONBOARDING}
-            component={Connection.Onboarding}
-          />
-          <Stack.Screen name={SCREENS.SIGN_IN} component={Connection.SignIn} />
-          <Stack.Screen name={SCREENS.SIGN_UP} component={Connection.SignUp} />
-          <Stack.Screen
             name={SCREENS.RESET_PASSWORD}
             component={Connection.ResetPassword}
           />
         </>
-      )}
+      )} */}
     </Stack.Navigator>
   );
 }

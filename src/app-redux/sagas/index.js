@@ -1,6 +1,6 @@
 import {all} from 'redux-saga/effects';
-import {authActionWatcher} from './auth/auth.sagas';
+import {appActionWatcher} from './app/app.sagas';
 
 export default function* rootSaga() {
-  yield all([authActionWatcher()]);
+  yield all([appActionWatcher()]);
 }

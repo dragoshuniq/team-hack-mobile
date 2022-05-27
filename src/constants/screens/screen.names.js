@@ -1,8 +1,5 @@
 export const SCREENS = {
-  SPLASH: 'Splash',
-  ONBOARDING: 'Onboarding',
-  SIGN_IN: 'SignIn',
-  SIGN_UP: 'SignUp',
-  RESET_PASSWORD: 'ResetPassword',
+  QRCODE: 'QRcode',
+  ChildMap: 'ChildMap',
   TAB_NAVIGATION: 'TabNavigation',
 };
