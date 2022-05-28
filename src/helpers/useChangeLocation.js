@@ -9,13 +9,11 @@ const useChangeLocation = () => {
 
   useEffect(() => {
     socket.current = io('http://192.168.151.38:8080/');
-    if (socket.connected) {
-      socket.current.emit('addUser', getUniqueId());
+    socket.current.emit('addUser', getUniqueId());
 
-      socket.current.on('confirmedScanned', () => {
-        dispatch(getAllUserByDevice(getUniqueId()));
-      });
-    }
+    socket.current.on('confirmedScanned', () => {
+      dispatch(getAllUserByDevice(getUniqueId()));
+    });
     return () => {
       socket.current.disconnect();
     };

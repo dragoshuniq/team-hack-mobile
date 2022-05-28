@@ -50,6 +50,7 @@ export default function ChildSupport(props) {
       message: data.problem,
       theme: 'darkblue',
       native: true,
+      duration: 10000,
     });
   }
 
