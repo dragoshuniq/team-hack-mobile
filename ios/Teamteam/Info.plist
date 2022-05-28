@@ -24,7 +24,7 @@
 			<string>Fontisto.ttf</string>
 		</array>
 		<key>CFBundleDisplayName</key>
-		<string>Teamteam</string>
+		<string>Carepad</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
