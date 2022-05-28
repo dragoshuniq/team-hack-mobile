@@ -27,7 +27,11 @@ export default function QrCode() {
     <View style={{flex: 1}}>
       <View style={styles.qrContainer}>
         <Text style={styles.textInfo}>Scanați pentru a începe!</Text>
-        <QRCode value={deviceId} size={300} logo={require('assets/logo.png')} />
+        <QRCode
+          value={deviceId}
+          size={300}
+          logo={require('assets/logo_white.png')}
+        />
       </View>
     </View>
   );
