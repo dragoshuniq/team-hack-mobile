@@ -27,6 +27,7 @@ function* getAllUsersByDeviceGenerator({uniqueDeviceId = getUniqueId()}) {
     const currentUser = res.users.filter(
       pr => pr.uniqueDeviceId === state.uniqueDeviceId,
     );
+    console.log(res);
 
     yield put(
       setter({

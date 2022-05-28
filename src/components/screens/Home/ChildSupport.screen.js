@@ -19,10 +19,11 @@ import {problemList} from 'constants/data/support.data';
 import Input from 'utils/Input';
 import Mat from 'react-native-vector-icons/MaterialIcons';
 import {Notifications} from 'react-native-notifications';
+import useChangeLocation from 'helpers/useChangeLocation';
 
 export default function ChildSupport(props) {
   const dim = useWindowDimensions();
-  const {parents} = props;
+  const {parents, user} = props;
   const dialCall = number => {
     let phoneNumber = '';
     if (Platform.OS === 'android') {
@@ -33,34 +34,23 @@ export default function ChildSupport(props) {
     Linking.openURL(phoneNumber);
   };
 
-  React.useEffect(() => {
-    Notifications.ios.checkPermissions().then(currentPermissions => {
-      console.log('Badges enabled: ' + !!currentPermissions.badge);
-      console.log('Sounds enabled: ' + !!currentPermissions.sound);
-      console.log('Alerts enabled: ' + !!currentPermissions.alert);
-      console.log('Car Play enabled: ' + !!currentPermissions.carPlay);
-      console.log(
-        'Critical Alerts enabled: ' + !!currentPermissions.criticalAlert,
-      );
-      console.log('Provisional enabled: ' + !!currentPermissions.provisional);
-      console.log(
-        'Provides App Notification Settings enabled: ' +
-          !!currentPermissions.providesAppNotificationSettings,
-      );
-      console.log('Announcement enabled: ' + !!currentPermissions.announcement);
-    });
-  }, []);
-
   const {handleSubmit, handleChange, values, setFieldValue} = useFormik({
     initialValues: {
       problem: problemList[2],
       person: parents[0],
     },
-    onSubmit: sendNotification,
+    onSubmit: notify,
   });
+  const {sendNotification} = useChangeLocation();
 
-  function sendNotification(data) {
-    pushNotification();
+  function notify(data) {
+    sendNotification({
+      title: data.problem,
+      subtitle: data.problem,
+      message: data.problem,
+      theme: 'darkblue',
+      native: true,
+    });
   }
 
   return (
@@ -118,7 +108,7 @@ export default function ChildSupport(props) {
         <TouchableOpacity
           style={styles.urgentCall}
           onPress={() => {
-            dialCall('0790386718');
+            dialCall(user.phoneNo);
           }}>
           <Text style={styles.urgentCallText}>Urgenta</Text>
           <Ion name="ios-call" color="white" size={26} />

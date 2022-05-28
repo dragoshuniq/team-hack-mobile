@@ -28,6 +28,7 @@
     "@reduxjs/toolkit": "^1.8.2",
     "axios": "^0.27.2",
     "dayjs": "^1.11.2",
+    "distance-to-polygon": "^2.0.2",
     "fbjs": "^3.0.4",
     "formik": "^2.2.9",
     "geolib": "^3.3.3",

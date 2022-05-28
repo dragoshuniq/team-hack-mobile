@@ -1,4 +1,3 @@
-import {uniq} from 'lodash';
 import {useCallback, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {io} from 'socket.io-client';
@@ -10,10 +9,13 @@ const useChangeLocation = () => {
 
   useEffect(() => {
     socket.current = io('http://192.168.151.38:8080/');
-    socket.current.emit('addUser', getUniqueId());
-    socket.current.on('confirmedScanned', () => {
-      dispatch(getAllUserByDevice(getUniqueId()));
-    });
+    if (socket.connected) {
+      socket.current.emit('addUser', getUniqueId());
+
+      socket.current.on('confirmedScanned', () => {
+        dispatch(getAllUserByDevice(getUniqueId()));
+      });
+    }
     return () => {
       socket.current.disconnect();
     };
@@ -33,7 +35,20 @@ const useChangeLocation = () => {
     [],
   );
 
-  return sendDeviceLocation;
+  const sendNotification = useCallback(
+    notification => {
+      const data = {
+        uniqueDeviceId: getUniqueId(),
+        notification,
+      };
+      console.log(data);
+      socket.current.emit('notification', data);
+    },
+    // eslint-disable-next-line
+    [],
+  );
+
+  return {sendDeviceLocation, sendNotification};
 };
 
 export default useChangeLocation;

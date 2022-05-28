@@ -5,7 +5,7 @@ import {COLORS, SCREEN_SIZE, APP_STYLES} from 'theme/theme';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Splash from 'components/screens/Splash/Splash.screen.js';
-
+import {AreaType} from 'constants/data/areas.types';
 const ChildMap = props => {
   const {location, user} = props;
 
@@ -32,17 +32,29 @@ const ChildMap = props => {
             />
           </Animated.View>
         </MapView.Marker>
-        <Polygon
-          coordinates={triangleCoords}
-          fillColor={'rgba(255, 0, 0, 0.5)'}
-          strokeColor={'rgba(255, 0, 0, 0.5)'}
-        />
-        {[].map((marker, index) => {
+        {user.areas.map(({coord, _id, type}) => {
+          if (coord.length > 1)
+            return (
+              <Polygon
+                key={_id}
+                coordinates={coord.map(c => ({
+                  latitude: c.lat,
+                  longitude: c.lng,
+                }))}
+                fillColor={
+                  AreaType.DANGER === type
+                    ? 'rgba(255, 0, 0, 0.5)'
+                    : 'rgba(0, 255, 0, 0.3)'
+                }
+                strokeColor={'transparent'}
+              />
+            );
+          const coords = {
+            latitude: coord[0].lat,
+            longitude: coord[0].lng,
+          };
           return (
-            <MapView.Marker
-              key={index}
-              coordinate={marker.location}
-              onPress={e => console.log(e)}>
+            <MapView.Marker key={_id} coordinate={coords}>
               <Animated.View style={styles.markerWrap}>
                 <Animated.Image
                   source={require('assets/marker.png')}

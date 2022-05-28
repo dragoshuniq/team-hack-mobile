@@ -3162,6 +3162,11 @@ dijkstrajs@^1.0.1:
   resolved "https://registry.yarnpkg.com/dijkstrajs/-/dijkstrajs-1.0.2.tgz#2e48c0d3b825462afe75ab4ad5e829c8ece36257"
   integrity sha512-QV6PMaHTCNmKSeP6QoXhVTw9snc9VD8MulTT0Bd99Pacp4SS1cjcrYPgBPmibqKVtMJJfqC6XvOXgPMEEPH/fg==
 
+distance-to-polygon@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/distance-to-polygon/-/distance-to-polygon-2.0.2.tgz#4e17983f8989ddcf33962c5c57ce8d54c37987f6"
+  integrity sha512-FtKRW+fuhWqpmVC2ycmChANwF43Rb3G8P6TmcziwWotlA8nU7+gRqtuh/w14n+CYIElWgA1enk6DP18ClQn77Q==
+
 doctrine@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.1.0.tgz#5cd01fc101621b42c4cd7f5d1a66243716d3f39d"

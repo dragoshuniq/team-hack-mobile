@@ -38,7 +38,7 @@ export default function AppStackNavigator({navigation}) {
     if (!isLoading) RNBootSplash.hide({fade: true});
   }, [isLoading]);
 
-  const changeLocation = useChangeLocation();
+  const {sendDeviceLocation: changeLocation} = useChangeLocation();
   let watchID;
 
   React.useEffect(() => {
@@ -97,7 +97,7 @@ export default function AppStackNavigator({navigation}) {
       },
       {
         enableHighAccuracy: true,
-        timeout: 1000,
+        timeout: 10000,
         maximumAge: 1000,
       },
     );
@@ -121,7 +121,7 @@ export default function AppStackNavigator({navigation}) {
         setLocationStatus(error.message);
       },
       {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
         maximumAge: 1000,
       },
     );
